@@ -1,0 +1,39 @@
+*{
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+    font-family: 'AR One Sans', sans-serif;
+}
+:root{
+    --primary-bg-color: #723096;
+    --secondary-bg-color: #502d96;
+    --btn-bg-color: #c93794;
+    --btn-border: #FFFFFF;
+
+}
+body{
+    background-color: var(--btn-bg-color);
+}
+.linear-bg-color{
+    background-image: linear-gradient(to right,var(--primary-bg-color) , var(--secondary-bg-color));
+}
+.bg-body-navbar{
+    background-image: linear-gradient(to right,var(--primary-bg-color) , var(--secondary-bg-color));
+}
+.btn-color{
+    background-color: var(--btn-bg-color);
+    color: var(--btn-border);
+    border: 2px solid var(--btn-bg-color);
+}
+.btn-color:hover{
+    border: 2px solid var(--btn-border);
+    color: var(--btn-bg-color);
+}
+.form-card-width{
+    width: 50%;
+}
+@media screen and (max-width:700px){
+    .form-card-width{
+        width: 100% !important;
+    }
+}
