@@ -1,14 +1,16 @@
 // const express = require('express')
 import express from 'express';
-import mongoose from 'mongoose';
 import ejs from "ejs";
 import cookieParser from 'cookie-parser';
 import Jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt'
-import { Console, error } from 'console';
+import { isdatabase_connected } from './Database/Connection.js';
+import { msg, login } from './Modals/Schema.js';
+import { authentication,UserisLogin } from './Function/user_modules.js';
+import  {config}  from 'dotenv';
 const app = express()
 const port = 3004;
-
+config();
 // middlewares starts
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
@@ -16,45 +18,9 @@ app.use(cookieParser());
 app.set("view engine", 'ejs');
 
 // middleware ends
-// Pages 
 // Coonenting database named Tododata
-mongoose.connect('mongodb+srv://JunaidKhan:fardeen786@tododata.4opmabr.mongodb.net/', {
-  dbName: "TodoData",
-}).then(c => {
-  console.log("Connection Made")
-}).catch(e => {
-  console.log("Connection failed")
-})
+await isdatabase_connected();
 
-// Schema of todo list 
-const todoschema = new mongoose.Schema({
-  Heading: String,
-  About: String,
-  Email:String
-})
-
-// Scehma Login Details 
-const loginschema = new mongoose.Schema({
-  Name: String,
-  Email: String,
-  Password: String
-})
-// Connection to collection in databse
-const msg = mongoose.model('Todo', todoschema)
-// Login Collection 
-const login = mongoose.model('Login', loginschema)
-
-// Authenticaton Function 
-const authentication = async (req, res, next) => {
-  const { token } = req.cookies;
-  if (token) {
-    next();
-  }
-  else {
-    res.redirect('/login');
-  }
-
-}
 
 // Get request url 
 
@@ -63,21 +29,23 @@ app.get('/', authentication, (req, res) => {
 })
 
 // Login page url 
-app.get('/login', (req, res) => {
+app.get('/login',UserisLogin, (req, res) => {
   const msg = req.query.msg;
-  res.render('login.ejs',{msg});
+  res.render('login.ejs', { msg });
 })
+
+
 // register page url 
-app.get('/register', (req, res) => {
+app.get('/register',UserisLogin, (req, res) => {
   res.render('register.ejs');
 })
 // Tododata showing url
-app.get('/todos',authentication, async (req, res) => {
-   // saving Todo using user Email 
-   const {token} = req.cookies;
-   const {_id} = await Jwt.verify(token,"secrettoken")
-   const user_detail= await login.findById({_id})
-  const data = await msg.find({Email:user_detail.Email});
+app.get('/todos', authentication, async (req, res) => {
+  // saving Todo using user Email 
+  const { token } = req.cookies;
+  const { _id } = await Jwt.verify(token, process.env.SecretToken)
+  const user_detail = await login.findById({ _id })
+  const data = await msg.find({ Email: user_detail.Email });
   res.render('todos.ejs', { data: data });
 })
 // Update page url 
@@ -116,15 +84,15 @@ app.get('/logout', async (req, res) => {
 app.post('/register', async (req, res) => {
   const { name, email, password } = req.body;
   let user = await login.findOne({ Email: email });
-  if(user){
-    return res.render('register',{newMsg:"Email Already in Use"});
+  if (user) {
+    return res.render('register', { newMsg: "Email Already in Use" });
   }
 
-  const HashedPassword =await bcrypt.hash(password, 10);
+  const HashedPassword = await bcrypt.hash(password, 10);
   login.create({
-    Name:name,
-    Email:email,
-    Password:HashedPassword
+    Name: name,
+    Email: email,
+    Password: HashedPassword
   })
   res.redirect("/login");
 })
@@ -136,10 +104,10 @@ app.post('/login', async (req, res) => {
     return res.redirect(`/login?msg=User Not Registered Please Register.`);
   }
   const pass = await bcrypt.compare(password, user.Password);
-  if(!pass){
-    return res.render('login',{error: "Wrong Password"});
+  if (!pass) {
+    return res.render('login', { error: "Wrong Password" });
   }
-  const token = await Jwt.sign({ _id: user._id }, "secrettoken");
+  const token = await Jwt.sign({ _id: user._id }, process.env.SecretToken);
   await res.cookie('token', token, {
     httpOnly: true,
     expires: new Date(Date.now() + 60 * 60 * 1000),
@@ -150,9 +118,9 @@ app.post('/login', async (req, res) => {
 // Adding Todo Data to database 
 app.post('/', async (req, res) => {
   // saving Todo using user Email 
-  const {token} = req.cookies;
-  const {_id} = await Jwt.verify(token,"secrettoken")
-  const user_detail= await login.findById({_id})
+  const { token } = req.cookies;
+  const { _id } = await Jwt.verify(token, process.env.SecretToken)
+  const user_detail = await login.findById({ _id })
 
   // Adding data to Database 
   await msg.create({
