@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 export const isdatabase_connected =async ()=>{
-    await mongoose.connect(`mongodb+srv://JunaidKhan:${process.env.Database}@tododata.4opmabr.mongodb.net/`
+    await mongoose.connect(process.env.DataBase
     , {
   dbName: "TodoData",
 }).then(c => {
