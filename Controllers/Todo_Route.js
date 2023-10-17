@@ -1,7 +1,8 @@
 import Jwt from "jsonwebtoken";
 import { login, msg } from "../Modals/Schema.js";
 
-// Tododata showing url
+
+// Tododata showing urls
 export const TodoData = async (req, res) => {
     // getting Token from cookies 
     const { token } = req.cookies;

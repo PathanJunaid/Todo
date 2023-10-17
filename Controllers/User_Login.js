@@ -22,7 +22,8 @@ export const Logout = async (req, res) => {
     res.cookie('token', token, {
         httpOnly: true,
         expires: new Date(Date.now()),
-        secure: true
+        secure: true,
+        sameSite:'Lax'
     })
     // Redirecting user to Login page 
     res.redirect('/');
@@ -69,7 +70,8 @@ export const Login_Post = async (req, res) => {
     res.cookie('token', token, {
         httpOnly: true,
         expires: new Date(Date.now() + 60 * 60 * 1000),
-        secure: true
+        secure: true,
+        sameSite:'Lax'
     })
     // redirecting to user Todo page 
     res.redirect('/');

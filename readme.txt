@@ -5,6 +5,7 @@ Packages Used
 >>npm i  mongoose {to connect with the mongodb database}
 >>npm i body-parser {to use urlencoded in express}
 >>npm i ejs {to use ejs file}
+>>npm i cors {to use cors file}
 
 
 download mongodb application from 
