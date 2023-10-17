@@ -6,10 +6,11 @@ import Jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt'
 import { isdatabase_connected } from './Database/Connection.js';
 import { msg, login } from './Modals/Schema.js';
-import { authentication,UserisLogin } from './Function/user_modules.js';
+import { authentication,UserisLogin } from './Middlewares/user_modules.js';
 import  {config}  from 'dotenv';
 const app = express()
 const port = 3004;
+
 config();
 // middlewares starts
 app.use(express.urlencoded({ extended: true }));
@@ -73,7 +74,7 @@ app.get('/delete/:id', async (req, res) => {
 // Logout url 
 app.get('/logout', async (req, res) => {
   const { token } = req.cookies;
-  await res.cookie('token', token, {
+  res.cookie('token', token, {
     httpOnly: true,
     expires: new Date(Date.now()),
     secure: true
@@ -107,8 +108,8 @@ app.post('/login', async (req, res) => {
   if (!pass) {
     return res.render('login', { error: "Wrong Password" });
   }
-  const token = await Jwt.sign({ _id: user._id }, process.env.SecretToken);
-  await res.cookie('token', token, {
+  const token = Jwt.sign({ _id: user._id }, process.env.SecretToken);
+  res.cookie('token', token, {
     httpOnly: true,
     expires: new Date(Date.now() + 60 * 60 * 1000),
     secure: true
