@@ -1,15 +1,98 @@
-Packages Used 
->>npm init  {To install package.json file}
->>npm i express {To install node.js framework express.js}
->>npm i nodemon {to run a server continuesly}
->>npm i  mongoose {to connect with the mongodb database}
->>npm i body-parser {to use urlencoded in express}
->>npm i ejs {to use ejs file}
->>npm i cors {to use cors file}
 
+# Todolist App
 
-download mongodb application from 
-use database mongodb {
-    enter url of mongodb : at server.js file line number "14"(mongoose.connect('mongodb://localhost:27017');
-    component will be name "Collage";
-}
+A simple Todo List application built with Node.js, Express, and MongoDB.
+
+## Table of Contents
+
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Dependencies](#dependencies)
+- [Routes](#routes)
+- [License](#license)
+- [Author](#author)
+
+## Features
+
+- User authentication with JWT
+- Add, edit, and delete Todo items
+- ...
+
+## Installation
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/PathanJunaid/Todo.git
+```
+
+2. Install dependencies:
+
+```bash
+cd Todo
+npm install
+```
+
+3. Set up environment variables:
+
+Create a `.env` file in the root directory and add the following:
+
+```
+DB_URI=YOUR_MONGODB_URI
+SECRET_KEY=YOUR_SECRET_KEY
+port = 3000
+```
+
+## Usage
+
+To start the server, run:
+
+```bash
+npm start
+```
+
+The app will be available at `http://localhost:PORT`.
+
+## Dependencies
+
+- bcrypt
+- body-parser
+- cookie-parser
+- cors
+- dotenv
+- ejs
+- express
+- jsonwebtoken
+- mongodb
+- mongoose
+- node
+- nodemon
+
+## Routes
+
+### User Routes
+
+- `GET /login` - Show login page
+- `GET /register` - Show registration page
+- `GET /logout` - Logout the user
+- `POST /register` - Process registration form
+- `POST /login` - Process login form
+
+### Todo Routes
+
+- `GET /` - Show home page
+- `GET /todos` - Get all Todos
+- `GET /edit/:id` - Show edit page for a specific Todo
+- `POST /` - Add a new Todo
+- `GET /delete/:id` - Delete a Todo
+- `POST /edit/:id` - Update a Todo
+
+## License
+
+This project is licensed under the ISC License - see the [LICENSE](LICENSE) file for details.
+
+## Author
+
+- [Junaid Khan](https://github.com/PathanJunaid)
+```
