@@ -23,7 +23,7 @@ app.use(cors({
 }));
 // middleware ends
 // Coonenting database named Tododata
-await isdatabase_connected();
+isdatabase_connected();
 
 app.listen(process.env.port, () => {
   console.log(`Example app listening on port ${process.env.port}`)
